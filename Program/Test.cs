@@ -7,12 +7,7 @@ class Test
 {
     public static bool Control(int numbUser, int start, int end)
     {
-        if (numbUser < start || numbUser > end)
-        {
-            Console.WriteLine("Число выходит за границы игры");
-            return false;
-        }
-        else return true;
+        return numbUser > start && numbUser < end;
     }
     public static Exodus Skelet(int numbUser, int secrteNumbers)
     {

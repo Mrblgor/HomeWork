@@ -1,7 +1,8 @@
-﻿using System.IO;
-using System.CodeDom.Compiler;
+﻿using System.CodeDom.Compiler;
+using System.IO;
 using System.Reflection.Emit;
 using System.Threading.Channels;
+using static Program.GameSession;
 
 namespace Program;
 
@@ -10,22 +11,26 @@ class Program
 {
     static void Main(string[] args)
     {
+        Console.Clear();
         INumberGenerator myGem = new RandomNumber();
         Console.WriteLine("--------------------------------------------");
         Console.WriteLine("Привет, это Игра \"Угадай Число\" ");
         Console.WriteLine("Выбери сложность игры");
         Console.WriteLine("1 - Легкая сложность: 10 жизней");
-        Console.WriteLine("2 - Легкая сложность: 5 жизней");
-        Console.WriteLine("3 - Легкая сложность: 2 жизней");
+        Console.WriteLine("2 - Средняя сложность: 5 жизней");
+        Console.WriteLine("3 - Хард сложность: 2 жизней");
         int complexity = Convert.ToInt32(Console.ReadLine());
         int lives;
         switch (complexity)
         {
-            case 1: lives = 10;
+            case 1:
+                lives = 10;
                 break;
-            case 2: lives = 5;
+            case 2:
+                lives = 5;
                 break;
-            case 3: lives = 2;
+            case 3:
+                lives = 2;
                 break;
             default:
                 Console.WriteLine("Дальше Бога нет");

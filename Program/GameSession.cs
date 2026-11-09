@@ -10,7 +10,6 @@ namespace Program;
 internal class GameSession
 {
     public delegate void GameMessage(string message);
-
     public event GameMessage OnGameMessage;
     private readonly INumberGenerator _generator;
     private int _lives = 5;
@@ -40,6 +39,12 @@ internal class GameSession
                 continue;
             }
             bool proverka = Test.Control(numbUser, left, right);
+            if (proverka == false && OnGameMessage != null)
+            {
+                OnGameMessage?.Invoke("Число выходит за границы игры");
+                _lives--;
+                OnGameMessage?.Invoke($"Жизней осталось {_lives}");
+            }
             if (proverka == false) continue;
             Exodus result = Test.Skelet(numbUser, secret);
             if (result == Exodus.Victory)
@@ -48,10 +53,8 @@ internal class GameSession
                 {
                     OnGameMessage?.Invoke("Ура!!! Победа!!!");
                 }
-                using (StreamWriter sw = new StreamWriter("GameStats.txt", true))
-                {
-                    sw.WriteLine($"\"GameStats.txt\" {DateTime.Now}: Победа! Осталось жизней: {_lives}");
-                }
+                using StreamWriter sw = new("GameStats.txt", true);
+                sw.WriteLine($"\"GameStats.txt\" {DateTime.Now}: Победа! Осталось жизней: {_lives}");
                 return;
             }
             if (result == Exodus.More)
@@ -72,9 +75,15 @@ internal class GameSession
             OnGameMessage?.Invoke($"Жизней осталось {_lives}");
         }
         Console.WriteLine("Вы проиграли жизни закончились");
-        using (StreamWriter sw = new StreamWriter("GameStats.txt", true))
+        using (StreamWriter sw = new("GameStats.txt", true))
         {
             sw.WriteLine($"\"GameStats.txt\" {DateTime.Now}: Поражение! Жизни закончились. {_lives}");
         }
+        if (OnGameMessage != null)
+        {
+            OnGameMessage.Invoke("Нажмите любую клавишу для выхода из игры");
+        }
+        Console.ReadKey();
+        Console.Clear();
     }
 }
