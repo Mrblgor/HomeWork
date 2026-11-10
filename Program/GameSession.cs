@@ -35,7 +35,7 @@ internal class GameSession
                 {
                     OnGameMessage?.Invoke("Вы вводите не число");
                 }
-                Console.WriteLine($"Жизней осталось {_lives}");
+                OnGameMessage?.Invoke($"Жизней осталось {_lives}");
                 continue;
             }
             bool proverka = Test.Control(numbUser, left, right);
@@ -45,7 +45,6 @@ internal class GameSession
                 _lives--;
                 OnGameMessage?.Invoke($"Жизней осталось {_lives}");
             }
-            if (proverka == false) continue;
             Exodus result = Test.Skelet(numbUser, secret);
             if (result == Exodus.Victory)
             {
@@ -53,8 +52,7 @@ internal class GameSession
                 {
                     OnGameMessage?.Invoke("Ура!!! Победа!!!");
                 }
-                using StreamWriter sw = new("GameStats.txt", true);
-                sw.WriteLine($"\"GameStats.txt\" {DateTime.Now}: Победа! Осталось жизней: {_lives}");
+                File.AppendAllText("GameStats.txt", $"{DateTime.Now}: Победа! Осталось жизней: {_lives}\n");
                 return;
             }
             if (result == Exodus.More)
@@ -74,11 +72,8 @@ internal class GameSession
             _lives--;
             OnGameMessage?.Invoke($"Жизней осталось {_lives}");
         }
+        File.AppendAllText("GameStats.txt", $"{DateTime.Now}: Поражение! Жизни закончились. {_lives}\n");
         Console.WriteLine("Вы проиграли жизни закончились");
-        using (StreamWriter sw = new("GameStats.txt", true))
-        {
-            sw.WriteLine($"\"GameStats.txt\" {DateTime.Now}: Поражение! Жизни закончились. {_lives}");
-        }
         if (OnGameMessage != null)
         {
             OnGameMessage.Invoke("Нажмите любую клавишу для выхода из игры");
