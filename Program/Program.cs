@@ -37,7 +37,9 @@ class Program
                 return;
         }
         GameSession session = new(myGem, lives);
+        FileSave saver = new(@"C:\Users\igorb\OneDrive\Desktop\вуз\2_курс\Технологии_програмирования_C#\Угадай игру\Program\Program\bin\Debug\net10.0\GameStats.txt");
         session.OnGameMessage += Console.WriteLine;
+        session.OnGameSave += saver.Save;
         Viborka(session);
     }
     static void Viborka(GameSession session)
